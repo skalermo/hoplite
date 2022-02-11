@@ -14,7 +14,7 @@ import hoplite.game.moves
 import hoplite.game.state
 import hoplite.vision.observer
 import hoplite.controller
-import hoplite.monkey_runner
+import hoplite.ppadb_runner
 import hoplite.actuator
 import hoplite.brain
 
