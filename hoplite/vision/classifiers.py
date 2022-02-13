@@ -5,25 +5,8 @@
 import numpy
 import hoplite.game.terrain
 import hoplite.game.status
-
-
-def is_close(tgt, ref, tol=.001):
-    """Check if two pixels are of same color.
-
-    Parameters
-    ----------
-    tgt : numpy.ndarray
-        Target pixel (vector).
-    ref : numpy.ndarray
-        Rerence pixel (vector).
-
-    Returns
-    -------
-    bool
-        `True` if pixels are the same.
-
-    """
-    return numpy.isclose(tgt - ref, 0, atol=tol).all()
+from hoplite.vision.terrain import *
+from hoplite.vision.utils import is_close
 
 
 def terrain(part):
@@ -40,62 +23,27 @@ def terrain(part):
         `hoplite.game.terrain.SurfaceElement` representation for that tile.
 
     """
-    if is_close(part[10, 0], [0.290196, 0.301961, 0.290196])\
-            or is_close(part[10, 0], [0.223529, 0.235294, 0.223529]):
-        if is_close(part[45, 40], [0.937255, 0.541176, 0.192157]):
-            return hoplite.game.terrain.SurfaceElement.FOOTMAN
-        if is_close(part[15, 26], [0.611765, 0.890196, 0.352941]):
-            return hoplite.game.terrain.SurfaceElement.ARCHER
-        if is_close(part[37, 37], [0.741176, 0.141176, 0.192157]):
-            return hoplite.game.terrain.SurfaceElement.PLAYER
-        if is_close(part[20, 23], [1.000000, 0.764706, 0.258824]):
-            return hoplite.game.terrain.SurfaceElement.BOMB
-        if is_close(part[26, 26], [0.4509804, 0.27058825, 0.09411765]):
-            return hoplite.game.terrain.SurfaceElement.SPEAR
-        if is_close(part[26, 26], [0.9372549, 0.5411765, 0.19215687]):
-            return hoplite.game.terrain.SurfaceElement.SPEAR
-        return hoplite.game.terrain.SurfaceElement.GROUND
-    if is_close(part[15, 15], numpy.array([0.41960785, 0.07843138, 0.0627451])):
-        return hoplite.game.terrain.SurfaceElement.MAGMA
-    if is_close(part[33, 28], [0.905882, 0.364706, 0.352941]):
-        return hoplite.game.terrain.SurfaceElement.DEMOLITIONIST_HOLDING_BOMB
-    if is_close(part[33, 28], [0.160784, 0.254902, 0.258824]):
-        if is_close(part[8, 25], [0.741176, 0.141176, 0.192157]):
-            return hoplite.game.terrain.SurfaceElement.FOOTMAN
-        return hoplite.game.terrain.SurfaceElement.DEMOLITIONIST_WITHOUT_BOMB
-    if is_close(part[48, 26], [0.741176, 0.286275, 0.517647]):
-        if is_close(part[0, 0], [0.741176, 0.141176, 0.192157]):
-            return hoplite.game.terrain.SurfaceElement.WIZARD_CHARGED
-        return hoplite.game.terrain.SurfaceElement.WIZARD_DISCHARGED
-    if is_close(part[37, 37], [0.741176, 0.141176, 0.192157]):
-        return hoplite.game.terrain.SurfaceElement.PLAYER
-    if is_close(part[15, 15], [0.321569, 0.427451, 0.223529]):
-        return hoplite.game.terrain.SurfaceElement.STAIRS
-    if is_close(part[42, 51], [0.905882, 0.364706, 0.352941]):
-        return hoplite.game.terrain.SurfaceElement.ALTAR_ON
-    if is_close(part[0, 0], numpy.array([0.321569, 0.427451, 0.223529])):
-        if is_close(part[28, 0], [0.129412, 0.141176, 0.129412]):
-            return hoplite.game.terrain.SurfaceElement.ALTAR_ON
-        return hoplite.game.terrain.SurfaceElement.ALTAR_OFF
-    if part[26, 26, 2] == 0 and\
-        abs(part[26, 26, 0] * 0.80465513 + 0.018641233 - part[26, 26, 1]) < .03:
-        return hoplite.game.terrain.SurfaceElement.FLEECE
-    if is_close(part[37, 26], [0.062745, 0.556863, 0.580392]):
-        return hoplite.game.terrain.SurfaceElement.PORTAL
-    if is_close(part[37, 26], [0.6117647, 0.68235296, 0.8392157]):
-        return hoplite.game.terrain.SurfaceElement.PORTAL
-    if is_close(part[20, 23], [1.000000, 0.764706, 0.258824]):
-        return hoplite.game.terrain.SurfaceElement.BOMB
-    if is_close(part[26, 26], [0.4509804, 0.27058825, 0.09411765]):
-        return hoplite.game.terrain.SurfaceElement.SPEAR
-    if is_close(part[26, 26], [0.9372549, 0.5411765, 0.19215687]):
-        return hoplite.game.terrain.SurfaceElement.SPEAR
-    if is_close(part[45, 40], [0.937255, 0.541176, 0.192157]):
-        return hoplite.game.terrain.SurfaceElement.FOOTMAN
-    if is_close(part[15, 26], [0.611765, 0.890196, 0.352941]):
-        return hoplite.game.terrain.SurfaceElement.ARCHER
-    if is_close(part[26, 26], [0.223529, 0.235294, 0.223529]):
-        return hoplite.game.terrain.SurfaceElement.GROUND
+    classifiers_functions = {
+        is_altar_on: hoplite.game.terrain.SurfaceElement.ALTAR_ON,
+        is_altar_off: hoplite.game.terrain.SurfaceElement.ALTAR_OFF,
+        is_archer: hoplite.game.terrain.SurfaceElement.ARCHER,
+        is_bomb: hoplite.game.terrain.SurfaceElement.BOMB,
+        is_demolitionist_without_bomb: hoplite.game.terrain.SurfaceElement.DEMOLITIONIST_WITHOUT_BOMB,
+        is_demolitionist_holding_bomb: hoplite.game.terrain.SurfaceElement.DEMOLITIONIST_HOLDING_BOMB,
+        is_fleece: hoplite.game.terrain.SurfaceElement.FLEECE,
+        is_footman: hoplite.game.terrain.SurfaceElement.FOOTMAN,
+        is_ground: hoplite.game.terrain.SurfaceElement.GROUND,
+        is_magma: hoplite.game.terrain.SurfaceElement.MAGMA,
+        is_player: hoplite.game.terrain.SurfaceElement.PLAYER,
+        is_portal: hoplite.game.terrain.SurfaceElement.PORTAL,
+        is_spear: hoplite.game.terrain.SurfaceElement.SPEAR,
+        is_stairs: hoplite.game.terrain.SurfaceElement.STAIRS,
+        is_wizard_charged: hoplite.game.terrain.SurfaceElement.WIZARD_CHARGED,
+        is_wizard_discharged: hoplite.game.terrain.SurfaceElement.WIZARD_DISCHARGED,
+    }
+    for f in classifiers_functions.keys():
+        if f(part):
+            return classifiers_functions[f]
     return None
 
 
