@@ -18,3 +18,20 @@ def is_close(tgt, ref, tol=.001):
 
     """
     return bool(np.isclose(tgt - ref, 0, atol=tol).all())
+
+
+def norm(iterable: list) -> list:
+    """Normalize pixel values to range [0; 1].
+
+    Parameters
+    ----------
+    iterable : list
+        List pixel values to normalize.
+
+    Returns
+    -------
+    list
+        Normalized list.
+
+    """
+    return list(map(lambda x: x / 255, iterable))
