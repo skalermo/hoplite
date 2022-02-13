@@ -237,7 +237,7 @@ class ScreenParser:
             "energy_one": TopLeftLocator((20, 28), (520, 1885), 4, save_parts=save_parts),
             "energy_two": TopLeftLocator((20, 28), (508, 1885), 4, save_parts=save_parts),
             "energy_three": TopLeftLocator((20, 28), (496, 1885), 4, save_parts=save_parts),
-            "energy": TopLeftLocator((40, 28), (544, 1885), save_parts=save_parts),
+            "energy": TopLeftLocator((40, 28), (552, 1885), save_parts=save_parts),
             "spree": TopLeftLocator((60, 72), (874, 1668), save_parts=save_parts),
             "prayer": PrayerLocator((900, 120), (40, 450), save_parts=save_parts),
         }

@@ -6,7 +6,7 @@ import numpy
 import hoplite.game.terrain
 import hoplite.game.status
 from hoplite.vision.terrain import *
-from hoplite.vision.utils import is_close
+from hoplite.vision.utils import is_close, norm
 
 
 def terrain(part):
@@ -139,9 +139,9 @@ def energy(part):
         Number of digits in the energy counter (excluding lightning).
 
     """
-    if is_close(part[0, 0], [0.905882, 0.905882, 0.352941]):
+    if is_close(part[0, 0], norm([230, 231, 90])):
         return 1
-    if is_close(part[0, 39], [0.905882, 0.905882, 0.352941]):
+    if is_close(part[0, 20], norm([230, 231, 90])):
         return 3
     return 2
 

@@ -45,6 +45,7 @@ def test_observe_cooldown(cooldown: int, array: np.ndarray):
         (100, '2.png'),
         (50, '3.png'),
         (36, '4.png'),
+        (2, '4-2.png'),
         (120, '6.png'),
         (20, '8.png'),
         (80, '9.png'),
@@ -85,7 +86,7 @@ def test_observe_hearts(hearts: Tuple[int, int], array: np.ndarray):
     indirect=['array'],
 )
 def test_observe_spear(has_spear: bool, array: np.ndarray):
-    assert ScreenParser()._observe_spear(array) == has_spear
+    assert ScreenParser()._observe_spear(array) is has_spear
 
 
 @pytest.mark.parametrize(
@@ -101,16 +102,13 @@ def test_observe_spree(spree: int, array: np.ndarray):
     assert ScreenParser()._observe_spree(array) == spree
 
 
-# @pytest.mark.parametrize(
-#     'array',
-#     [
-#         '8.png',
-#     ],
-#     indirect=['array'],
-# )
-# def test_observe_terrain(array: np.ndarray):
-#     terrain = ScreenParser()._observe_terrain(array)
-#     print(terrain)
-
-
-
+@pytest.mark.parametrize(
+    'array',
+    [
+        '9.png',
+    ],
+    indirect=['array'],
+)
+def test_observe_terrain(array: np.ndarray):
+    terrain = ScreenParser()._observe_terrain(array)
+    print(terrain)
