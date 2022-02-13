@@ -20,6 +20,11 @@ parts = {
 }
 
 
+def test_non52x52():
+    with pytest.raises(AssertionError):
+        is_altar_off(np.zeros((51, 51, 3)))
+
+
 @pytest.mark.parametrize(
     'altar_off, array',
     [(True, 'altar_off')] +
